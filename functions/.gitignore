@@ -1,0 +1,28 @@
+# Compiled JavaScript files
+*.js
+*.js.map
+
+# TypeScript v1 declaration files
+typings/
+
+# Node.js dependency directories
+node_modules/
+
+# dotenv environment variables files
+.env
+.env.local
+.env*.local
+
+# Firebase cache
+.firebase/
+
+# Firebase debug log
+firebase-debug.log*
+firebase-debug.*.log*
+
+# Firebase local credentials
+.runtimeconfig.json
+
+# OS files
+.DS_Store
+Thumbs.db
