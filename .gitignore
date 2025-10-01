@@ -48,6 +48,11 @@ app.*.map.json
 .env.local
 .env.*.local
 
+# Credential scripts (NEVER commit API keys)
+run_with_credentials.bat
+run_with_credentials.sh
+*_credentials.*
+
 # Firebase config (already tracked, but sensitive files should be excluded)
 # Uncomment if you want to exclude Firebase config files:
 # firebase_options.dart

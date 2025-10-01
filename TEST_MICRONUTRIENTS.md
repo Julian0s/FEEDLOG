@@ -13,9 +13,35 @@ Este documento explica como testar se os micronutrientes estão sendo populados 
    - API Key
    - Endpoint URL
 
+3. **⚠️ IMPORTANTE: Whitelist de IP do FatSecret**
+   - Acesse: https://platform.fatsecret.com/my-account/api-key
+   - Clique em "Add/edit your whitelist IP addresses here"
+   - Adicione pelo menos um IP:
+     - `127.0.0.1` (localhost)
+     - `0.0.0.0/0` (qualquer IP - apenas para testes)
+     - Ou seu IP público (obtenha em https://www.whatismyip.com/)
+   - **⏰ Mudanças podem levar até 24 horas para tomar efeito**
+
 ## 🚀 Como Executar o Teste
 
-### 1. Execute o app com TODAS as credenciais:
+### Opção A: Usar script de credenciais (RECOMENDADO) ⭐
+
+1. **Edite o arquivo de credenciais:**
+   - Windows: Abra `run_with_credentials.bat` em um editor de texto
+   - Linux/Mac: Abra `run_with_credentials.sh` em um editor de texto
+
+2. **Preencha suas credenciais OpenAI:**
+   ```bash
+   # Substitua estas linhas com seus dados reais:
+   set OPENAI_PROXY_API_KEY=seu_openai_key_aqui
+   set OPENAI_PROXY_ENDPOINT=seu_openai_endpoint_aqui
+   ```
+
+3. **Execute o script:**
+   - Windows: Dê duplo clique em `run_with_credentials.bat`
+   - Linux/Mac: `chmod +x run_with_credentials.sh && ./run_with_credentials.sh`
+
+### Opção B: Comando manual
 
 ```bash
 flutter run \
@@ -122,9 +148,17 @@ Se FatSecret estiver funcionando, você verá valores para:
 
 ### Problema: Erro "OAuth token request failed"
 
-- Verifique se as credenciais estão corretas
-- Verifique se a conta FatSecret está ativa
-- Tente gerar novas credenciais no painel FatSecret
+**Possíveis causas:**
+1. **Credenciais inválidas**
+   - Verifique se Client ID e Secret estão corretos
+   - Verifique se a conta FatSecret está ativa
+   - Tente gerar novas credenciais no painel FatSecret
+
+2. **IP não está na whitelist** ⚠️ **MAIS COMUM**
+   - Acesse: https://platform.fatsecret.com/my-account/api-key
+   - Verifique se adicionou `127.0.0.1` ou seu IP na whitelist
+   - Aguarde até 24 horas para mudanças tomarem efeito
+   - Console mostrará: `FatSecretError: OAuth token request failed: 401`
 
 ## 📝 Exemplo de Log Completo (Sucesso)
 
