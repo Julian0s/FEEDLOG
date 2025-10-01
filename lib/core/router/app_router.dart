@@ -13,7 +13,7 @@ import '../../features/onboarding/onboarding_step4_result.dart';
 import '../../features/auth/login_page.dart';
 import '../../features/auth/signup_page.dart';
 import '../../features/auth/auth_wrapper.dart';
-import '../widgets/global_chat_fab.dart';
+import '../widgets/global_chat_fab_cloud.dart';
 import '../../features/auth/forgot_password_page.dart';
 import '../../firestore/auth_service.dart';
 
