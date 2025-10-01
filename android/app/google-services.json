@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "653844235448",
+    "project_id": "feed-log-ntuo0h",
+    "storage_bucket": "feed-log-ntuo0h.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653844235448:android:75dbc070a503aac1bba04d",
+        "android_client_info": {
+          "package_name": "com.feedlog.feedlog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEeI9xrX8SRt0WK6RnFwiqUx8JXAf9yss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653844235448:android:d690701f8ff83758bba04d",
+        "android_client_info": {
+          "package_name": "com.mycompany.CounterApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEeI9xrX8SRt0WK6RnFwiqUx8JXAf9yss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653844235448:android:68b33eb4bc88a077bba04d",
+        "android_client_info": {
+          "package_name": "com.mycompany.feedlog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEeI9xrX8SRt0WK6RnFwiqUx8JXAf9yss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
