@@ -214,6 +214,32 @@ class _ChatSheetState extends State<_ChatSheet> {
         });
         return;
       }
+
+      // Check FatSecret configuration and warn user
+      final fatSecretClient = FatSecretHelper();
+      final isFatSecretConfigured = fatSecretClient._client.isConfigured;
+
+      if (!isFatSecretConfigured) {
+        // ignore: avoid_print
+        print('\n⚠️ WARNING: FatSecret API is NOT configured!');
+        print('   Micronutrients (calcium, iron, vitamins) will not be available.');
+        print('   To enable: Run with --dart-define=FATSECRET_CLIENT_ID=... --dart-define=FATSECRET_CLIENT_SECRET=...\n');
+
+        // Show warning to user
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                '⚠️ Micronutrients unavailable: FatSecret API not configured',
+                style: TextStyle(fontSize: 13),
+              ),
+              backgroundColor: Colors.orange.shade700,
+              duration: const Duration(seconds: 4),
+            ),
+          );
+        }
+      }
+
       final json = await client.parseMealFromText(userText: text);
       // Debug minimal logging (safe)
       // ignore: avoid_print
@@ -224,13 +250,26 @@ class _ChatSheetState extends State<_ChatSheet> {
       }
 
       // Enrich meals with FatSecret data
+      // ignore: avoid_print
+      print('\n🔄 Starting FatSecret enrichment for ${meals.length} meal(s)...');
+
       final fatSecretHelper = FatSecretHelper();
       final enrichedMeals = <MealEntry>[];
+
       for (final meal in meals) {
+        // ignore: avoid_print
+        print('\n📝 Processing ${mealTypeLabel(meal.mealType)} with ${meal.foods.length} food item(s)');
+
         final enrichedFoods = <FoodItem>[];
         for (final food in meal.foods) {
+          // ignore: avoid_print
+          print('   BEFORE enrichment: ${food.name} - calcium=${food.estimates.calcium.toStringAsFixed(1)}mg, iron=${food.estimates.iron.toStringAsFixed(1)}mg');
+
           final enriched = await fatSecretHelper.enrichFoodItem(food);
           enrichedFoods.add(enriched);
+
+          // ignore: avoid_print
+          print('   AFTER enrichment: ${enriched.name} - calcium=${enriched.estimates.calcium.toStringAsFixed(1)}mg, iron=${enriched.estimates.iron.toStringAsFixed(1)}mg');
         }
 
         // Recalculate totals with enriched data
@@ -260,6 +299,9 @@ class _ChatSheetState extends State<_ChatSheet> {
           chol += f.estimates.cholesterol;
         }
 
+        // ignore: avoid_print
+        print('   ✅ Meal totals: calcium=${calcium.toStringAsFixed(1)}mg, iron=${iron.toStringAsFixed(1)}mg, vitA=${vitA.toStringAsFixed(1)}, vitC=${vitC.toStringAsFixed(1)}mg');
+
         enrichedMeals.add(meal.copyWith(
           foods: enrichedFoods,
           totals: Macros(
@@ -284,6 +326,9 @@ class _ChatSheetState extends State<_ChatSheet> {
           ),
         ));
       }
+
+      // ignore: avoid_print
+      print('\n✅ Enrichment complete!\n');
 
       if (!mounted) return;
       // If authenticated, persist to Firestore; otherwise fallback to local provider

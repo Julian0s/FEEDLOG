@@ -14,11 +14,17 @@ class FatSecretHelper {
   /// 3. Scale nutrition to match the quantity
   Future<FoodItem> enrichFoodItem(FoodItem item) async {
     if (!_client.isConfigured) {
+      // ignore: avoid_print
+      print('⚠️ FatSecret NOT CONFIGURED - Skipping enrichment for "${item.name}"');
+      print('   Current macros: cal=${item.estimates.calories.toStringAsFixed(1)}, calcium=${item.estimates.calcium.toStringAsFixed(1)}mg');
       // Fallback: return item as-is if FatSecret not configured
       return item;
     }
 
     try {
+      // ignore: avoid_print
+      print('🔍 FatSecret: Searching for "${item.name}" (${item.quantity}${item.unit})');
+
       // Search for food
       final results = await _client.searchFoods(
         query: item.name,
@@ -26,6 +32,8 @@ class FatSecretHelper {
       );
 
       if (results.isEmpty) {
+        // ignore: avoid_print
+        print('   ❌ No results found for "${item.name}"');
         // No match found, return original
         return item;
       }
@@ -33,6 +41,10 @@ class FatSecretHelper {
       // Pick best match (first result)
       final bestMatch = results.first;
       final foodId = bestMatch['food_id'].toString();
+      final foodName = bestMatch['food_name'] ?? 'Unknown';
+
+      // ignore: avoid_print
+      print('   ✅ Found match: "$foodName" (ID: $foodId)');
 
       // Get detailed nutrition
       final details = await _client.getFoodDetails(foodId: foodId);
@@ -40,6 +52,8 @@ class FatSecretHelper {
       // Extract nutrition from first serving
       final servings = details['servings'];
       if (servings == null || servings is! Map) {
+        // ignore: avoid_print
+        print('   ❌ No serving data available');
         return item;
       }
 
@@ -51,11 +65,16 @@ class FatSecretHelper {
       } else if (serving is Map) {
         servingData = serving.cast<String, dynamic>();
       } else {
+        // ignore: avoid_print
+        print('   ❌ Invalid serving format');
         return item;
       }
 
       // Parse nutrition data
       final macros = _parseMacrosFromServing(servingData, item.quantity, item.unit);
+
+      // ignore: avoid_print
+      print('   📊 Enriched nutrition: cal=${macros.calories.toStringAsFixed(1)}, p=${macros.proteinG.toStringAsFixed(1)}g, calcium=${macros.calcium.toStringAsFixed(1)}mg, iron=${macros.iron.toStringAsFixed(1)}mg');
 
       return FoodItem(
         name: item.name,
@@ -65,7 +84,7 @@ class FatSecretHelper {
       );
     } catch (e) {
       // ignore: avoid_print
-      print('FatSecret enrichment failed for "${item.name}": $e');
+      print('❌ FatSecret enrichment FAILED for "${item.name}": $e');
       // Return original item on error
       return item;
     }
